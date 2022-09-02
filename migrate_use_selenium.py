@@ -50,15 +50,15 @@ gl_header = {"Private-Token": GITLAB_TOKEN}
 gl_params = {"page": "1", "per_page": "100"}
 
 ## リポジトリをget
-gl_user_res = requests.get(
+gl_project_res = requests.get(
     f"{GITLAB_API_BASE}/projects",
     headers=gl_header,
     params=gl_params,
 )
-gitlab_project_urls = [project.get("web_url") for project in gl_user_res.json()]
+gitlab_project_urls = [project.get("web_url") for project in gl_project_res.json()]
 
 # 組織名をget
-gl_project_namespace = (project.get("namespace") for project in gl_user_res.json())
+gl_project_namespace = (project.get("namespace") for project in gl_project_res.json())
 gl_org_names = {
     namespace.get("full_path")
     for namespace in gl_project_namespace
@@ -138,7 +138,7 @@ org_uids = [
 ]
 
 # giteaのmigrate
-for project in gl_user_res.json():
+for project in gl_project_res.json():
 
     project_url = project.get("web_url")
     project_name = project.get("path")
